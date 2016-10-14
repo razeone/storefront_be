@@ -17,13 +17,48 @@ class HomePage(models.Model):
     is_active = models.BooleanField(default=True)
 
 
-class UserProfile(models.Model):
+class Slider(models.Model):
     """
-    The user profile's model
+    A slider model
+    """
+    name = models.CharField(max_length=200)
+    is_active = models.BooleanField(null=False)
+    images = models.ManyToManyField('Image')
+
+
+class Image(models.Model):
+    """
+    An Image model to store all kind of images
+    """
+    image = models.ImageField(null=False)
+    name = models.CharField(max_length=200)
+
+
+class CustomerProfile(models.Model):
+    """
+    The customer profile's model
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    created_date = models.DateTimeField('created date',
-                                        default=now()
-                                        )
+    birthday = models.DateField(null=False)
+    description = models.CharField(max_length=140)
+    profile_picture = models.OneToOneField(Image, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(default=now())
     phone_number = models.CharField(max_length=10)
+    facebook_account = models.CharField(max_length=100)
+    twitter_account = models.CharField(max_length=100)
     is_wholesaler = models.BooleanField(default=False)
+
+# I think this model belongs to the store app
+
+
+"""
+class Address(models.Model):
+    name = models.CharField()
+    address_line_one = models.CharField(max_length=200)
+    address_line_two = models.CharField(max_length=200)
+    city = models.CharField(max_length=100)
+    zip_number = models.CharField(max_length=10)
+    state = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+
+"""
