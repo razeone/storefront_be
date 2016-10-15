@@ -1,6 +1,15 @@
 from rest_framework import serializers
 
-from django.contrib.auth import User
+from .models import Customer
 
-class UserSerializer(serializers.Serializer):
-	pass
+
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = (
+            'id',
+            'email',
+            'date_of_birth')
+        extra_kwargs = {
+            'users': {'lookup_field': 'email'}
+        }

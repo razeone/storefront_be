@@ -34,6 +34,7 @@
 
 	                    <hr>
 	                    <form action="customer-orders.html" method="post">
+	                    		<input type="hidden" value="{% csrf_token %}" name="csrf" id="csrf">
                                 <div class="form-group">
                                     <label for="name-login">Name</label>
                                     <input type="text" class="form-control" id="name-login">
@@ -84,3 +85,6 @@
 	</div>
 
 {% endblock content %}
+{% block footer_javascript_section %}
+	<script type="text/javascript" src="{{ STATIC_URL }}js/app.js"></script>
+{% endblock footer_javascript_section %}

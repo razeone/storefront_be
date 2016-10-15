@@ -14,45 +14,37 @@ import uuid
 
 
 class CustomerManager(BaseUserManager):
-    use_in_migrations = True
-
-    def _create_customer(
-            self,
-            email,
-            password,
-            is_staff,
-            is_superuser,
-            **extra_fields):
-        now = timezone.now()
+    def create_user(self, email, date_of_birth, password=None):
+        """
+        Creates and saves a User with the given email, date of
+        birth and password.
+        """
         if not email:
-            raise ValueError('The given email must be set')
-        if not password:
-            raise ValueError('The given password must be set')
-        email = self.normalize_email(email)
-        customer = self.model(email=email, is_staff=is_staff,
-                              is_superuser=is_superuser, is_active=True,
-                              date_joined=now, **extra_fields)
+            raise ValueError('Users must have an email address')
 
-        validate_password(password)
-        customer.set_password(password)
-        customer.save(using=self._db)
-        return customer
+        user = self.model(
+            email=self.normalize_email(email),
+            date_of_birth=date_of_birth,
+        )
 
-        def create_user(self, email, password=None, **extra_fields):
-            return self._create_customer(
-                email,
-                password,
-                False,
-                False,
-                **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-        def create_superuser(self, email, password, **extra_fields):
-            return self._create_customer(
-                email,
-                password,
-                True,
-                True,
-                **extra_fields)
+    def create_superuser(self, email, date_of_birth, password):
+        """
+        Creates and saves a superuser with the given email, date of
+        birth and password.
+        """
+        user = self.create_user(
+            email,
+            password=password,
+            date_of_birth=date_of_birth,
+        )
+        user.is_admin = True
+        user.is_staff = True
+        user.save(using=self._db)
+        return user
 
 
 class Customer(AbstractBaseUser, PermissionsMixin):
@@ -63,12 +55,9 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     date_joined = models.DateTimeField(default=timezone.now)
     date_of_birth = models.DateField(null=True)
-    is_staff = models.BooleanField(
-        default=False,
-        help_text='Designates whether the customer can log into this admin.')
-    is_active = models.BooleanField(
-        default=False,
-        help_text='Designates whether this customer should be treated as active.')
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['date_of_birth']
