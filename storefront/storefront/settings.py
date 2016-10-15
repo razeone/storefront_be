@@ -12,8 +12,13 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
+from pyserveru.config import EnvConfig
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Create a constant to store server side configs
+ENV_CONFIG = EnvConfig('/etc/storefront/skull-storefront.ini')
 
 
 # Quick-start development settings - unsuitable for production
@@ -37,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'home',
+    'register',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +55,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+ROOT_URL = ''
 ROOT_URLCONF = 'storefront.urls'
 
 TEMPLATES = [

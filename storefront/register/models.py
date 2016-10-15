@@ -40,9 +40,10 @@ class CustomerProfile(models.Model):
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birthday = models.DateField(null=False)
+    gender = models.CharField(null=False, max_length=10, default='Female')
     description = models.CharField(max_length=140)
     profile_picture = models.OneToOneField(Image, on_delete=models.CASCADE)
-    created_date = models.DateTimeField(default=now())
+    created_date = models.DateField(default=now)
     phone_number = models.CharField(max_length=10)
     facebook_account = models.CharField(max_length=100)
     twitter_account = models.CharField(max_length=100)

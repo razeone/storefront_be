@@ -5,11 +5,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-7">
-                    <h1>New account / Sign in</h1>
+                    <h1>Nueva cuenta / Registro</h1>
                 </div>
                 <div class="col-md-5">
                     <ul class="breadcrumb">
-                        <li><a href="index.html">Home</a>
+                        <li><a href="/">Home</a>
                         </li>
                         <li>New account / Sign in</li>
                     </ul>
@@ -21,6 +21,7 @@
 
 	<div id="content">
 	    <div class="container">
+	    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 	        <div class="row">
 	            <div class="col-md-6">
@@ -33,7 +34,7 @@
 
 	                    <hr>
 
-	                    <form action="customer-orders.html" method="post">
+	                    <form action="{% url 'register:user.id' %}" method="post">
 	                        <div class="form-group">
 	                            <label for="name-login">Name</label>
 	                            <input type="text" class="form-control" id="name-login">
