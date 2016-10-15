@@ -1,10 +1,20 @@
 from django.shortcuts import render
 
 # Create your views here.
+from django.views import generic
+
+from django.utils import timezone
 
 
-def index(request):
-    return render(request, 'register/index.html')
+class RegisterView(generic.ListView):
+    template_name = 'register/index.html'
+    # TO-DO:
+    # context_object_name = 'latest_advertisements'
+    pass
+
+
+class DetailView(generic.ListView):
+    template_name = 'register/register.html'
 
 
 def register(request):
@@ -15,4 +25,4 @@ def register(request):
         "you": "are",
         "awesome": "people"
     }
-    return render(request, 'home/register.html', {'user': user, 'example': example})
+    return render(request, 'register/register.html', {'user': user, 'example': example})

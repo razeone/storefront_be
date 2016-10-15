@@ -16,10 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from django.conf.urls import include
 from django.contrib import admin
-from register.views import index
+
+from django.views.generic import TemplateView
+
 
 urlpatterns = [
-    url(r'^$', index),
-    url(r'^register/', include('register.urls', namespace='home')),
+    # Index page is actually register's index page (template)
+    url(r'^$', TemplateView.as_view(template_name="register/index.html")),
+    url(r'^register/', include('register.urls', namespace='register')),
     url(r'^admin/', admin.site.urls),
 ]
