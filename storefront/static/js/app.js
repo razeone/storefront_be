@@ -37,9 +37,9 @@ $(function () {
     
     var url = 'http://localhost:8000/register/customer/';
     data = {
-        'user': 'example',
-        'master': 'chef',
-        'csrftoken': csrftoken
+        'email': 'example@user.com',
+        'password': '15raze12',
+        'date_of_birth': '1988-12-15',
     }
     console.log(data);
     $.ajax({

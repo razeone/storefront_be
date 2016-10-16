@@ -33,8 +33,14 @@ class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
 
     def create(self, request):
-        print(request.data)
-        return Response(request.data)
+        data = request.data
+        serializer = CustomerSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            try:
+                customer = serializer.save()
+            except Exception as e:
+                raise
+            return Response(request.data)
 
     def list(self, request):
         queryset = Customer.objects.all()
