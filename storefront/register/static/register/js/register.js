@@ -1,0 +1,1 @@
+console.log('Im the register app');
