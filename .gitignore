@@ -90,3 +90,6 @@ ENV/
 
 # DB Sqlite for dev
 db.sqlite3
+
+# Migrations
+storefront_be/*/migrations/*
