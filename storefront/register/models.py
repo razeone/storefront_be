@@ -2,18 +2,21 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.utils import timezone
-from django.utils.timezone import now
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 
 from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 import uuid
 # Create your models here.
 
 
 class CustomerManager(BaseUserManager):
+    """
+    The class to manage custome user's model
+    """
     def create_user(self, email, date_of_birth, password=None):
         """
         Creates and saves a User with the given email, date of
@@ -26,7 +29,11 @@ class CustomerManager(BaseUserManager):
             email=self.normalize_email(email),
             date_of_birth=date_of_birth,
         )
-
+        try:
+            validate_password(password)
+        except ValidationError:
+            # We need to log errors
+            return False
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -48,6 +55,9 @@ class CustomerManager(BaseUserManager):
 
 
 class Customer(AbstractBaseUser, PermissionsMixin):
+    """
+    The custom user class
+    """
     id = models.UUIDField(
         unique=True,
         primary_key=True,
@@ -114,23 +124,8 @@ class CustomerProfile(models.Model):
     gender = models.CharField(null=False, max_length=10, default='Female')
     description = models.CharField(max_length=140)
     profile_picture = models.OneToOneField(Image, on_delete=models.CASCADE)
-    created_date = models.DateField(default=now)
+    created_date = models.DateField(default=timezone.now)
     phone_number = models.CharField(max_length=10)
     facebook_account = models.CharField(max_length=100)
     twitter_account = models.CharField(max_length=100)
     is_wholesaler = models.BooleanField(default=False)
-
-# I think this model belongs to the store app
-
-
-"""
-class Address(models.Model):
-    name = models.CharField()
-    address_line_one = models.CharField(max_length=200)
-    address_line_two = models.CharField(max_length=200)
-    city = models.CharField(max_length=100)
-    zip_number = models.CharField(max_length=10)
-    state = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
-
-"""
