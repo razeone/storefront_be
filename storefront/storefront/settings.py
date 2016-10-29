@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'register.apps.RegisterConfig',
+    'warehouse.apps.WarehouseConfig',
+    'shop.apps.ShopConfig',
 ]
 
 AUTH_USER_MODEL = 'register.Customer'
