@@ -21,20 +21,17 @@ PURCHASE_STATUS = (
 CASH = 'CS'
 CREDIT_CARD = 'TC'
 CLIP = 'CL'
-ONLINE = 'OL'
 
 PAYMENT_TYPES = (
     (CASH, 'Cash'),
     (CREDIT_CARD, 'Credit card'),
     (CLIP, 'Clip'),
-    (ONLINE, 'Online'),
 )
 
 COMMISSIONS = {
     CASH: 0,
     CREDIT_CARD: 0.029,
     CLIP: 0.04,
-    ONLINE: 0.029,
 }
 
 DEFAULT_TAX = 0.16
@@ -84,17 +81,35 @@ class Purchase(models.Model):
     is_payed = models.BooleanField(default=False)
     timestamp = models.DateTimeField(default=timezone.now)
 
-    def get_subtotal(self):
+    def set_subtotal(self):
         subtotal = 0
         for product in self.products:
             subtotal += product.sale_cost
         self.subtotal = subtotal
-        return self.subtotal
 
     def get_commission(self):
-        if self.payment_method == 'CS':
-            pass
+            return COMMISSIONS[self.payment_method]
 
     def get_total(self):
-        if self.payment_method == 'CS':
-            pass
+        self.set_subtotal()
+        if self.payment_method == CASH:
+            self.total = (
+                self.subtotal +
+                (self.subtotal * self.get_commission())
+            )
+            return self.total
+
+        if self.payment_method == CLIP:
+            self.total = (
+                self.get_subtotal() +
+                (self.subtotal * self.get_commission())
+            )
+            return self.total
+
+        if self.payment_method == CREDIT_CARD:
+            self.total = (
+                self.get_subtotal() +
+                (self.subtotal * self.get_commission())
+            )
+            self.total += 0.3
+            return self.total
