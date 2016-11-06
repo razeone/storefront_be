@@ -40,7 +40,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
                 customer = serializer.save()
             except Exception as e:
                 raise
-            return Response(request.data)
+            return Response(serializer.data, status=201)
 
     def list(self, request):
         queryset = Customer.objects.all()

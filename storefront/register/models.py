@@ -17,6 +17,7 @@ class CustomerManager(BaseUserManager):
     """
     The class to manage custome user's model
     """
+
     def create_user(self, email, date_of_birth, password=None):
         """
         Creates and saves a User with the given email, date of
