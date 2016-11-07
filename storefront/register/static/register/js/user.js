@@ -54,7 +54,6 @@ function User(email, password, confirm) {
 
 
     this.create = function() {
-        console.log('Create');
         var userData = {
             email: this.email,
             password: this.password
@@ -74,14 +73,14 @@ function User(email, password, confirm) {
             data: userData
         })
         .done(function(res) {
-            if(res.status == 201) {
-                this.success.push('El usuario se ha creado correctamente');
-                return true;
-            }
+            $("#success-messages").html('El usuario se ha creado correctamente');
+            $("#success-messages").fadeIn();
         })
         .fail(function(res) {
-            this.errors.push(res.responseText);
-            return false;
+            for(error in res.responseJSON) {
+                $("#error-messages").html(res.responseJSON[error]);    
+            }
+            $("#error-messages").fadeIn();
         });
     }
 }
