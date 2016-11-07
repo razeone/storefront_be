@@ -8,14 +8,17 @@ function User(email, password, confirm) {
     this.password = password;
     this.confirm = confirm;
     this.errors = [];
-    this.success = [];
+
+    // The endpoint for user creation
     var validEndpoint = '/register/customer/'
 
+    // Email validation through JS and regex
     this.validateEmail = function() {
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
     }
 
+    // Easy password validation
     this.validatePassword = function() {
         if(this.password != this.confirm) {
             this.errors.push('Las contraseñas ingresadas no coinciden');
@@ -27,6 +30,7 @@ function User(email, password, confirm) {
         }
     }
 
+    // Validate all fields and fill error messages
     this.validate = function() {
         if(this.email == '' || this.password == '' || this.confirm == '') {
             this.errors.push('Todos los valores son requeridos');
@@ -44,6 +48,7 @@ function User(email, password, confirm) {
         }
     }
 
+    // Display error messages
     this.displayErrors = function() {
         $('#error-messages').html('');
             for(error in this.errors) {
@@ -52,13 +57,14 @@ function User(email, password, confirm) {
         $('#error-messages').fadeIn();
     }
 
-
+    // Create the user
     this.create = function() {
         var userData = {
             email: this.email,
             password: this.password
         };
 
+        // Getting CSRF
         var csrftoken = $.cookie('csrftoken');
 
         $.ajaxSetup({
@@ -73,10 +79,12 @@ function User(email, password, confirm) {
             data: userData
         })
         .done(function(res) {
+            // Success
             $("#success-messages").html('El usuario se ha creado correctamente');
             $("#success-messages").fadeIn();
         })
         .fail(function(res) {
+            // Errors
             for(error in res.responseJSON) {
                 $("#error-messages").html(res.responseJSON[error]);    
             }

@@ -1,5 +1,7 @@
 $(function(){
     
+    // We prevent default behaviour, then get the data from the form,
+    // and finally validate and create.
     $( "#register-form" ).submit(function( event ) {
         event.preventDefault();
         var email = $('#email-register').val();
